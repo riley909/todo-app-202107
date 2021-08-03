@@ -16,4 +16,9 @@ export class TodosController {
   createTodo(@Body() createTodoDto: CreateTodoDto): Promise<Todo> {
     return this.todosService.createTodo(createTodoDto);
   }
+
+  @Delete('/:id')
+  deleteTodo(@Param('id') id: number): Promise<void> {
+    return this.todosService.deleteTodo(id);
+  }
 }
