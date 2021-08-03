@@ -35,4 +35,9 @@ export class TodosService {
     await Todo.save(todo);
     return todo;
   }
+
+  async deleteTodo(id: number): Promise<void> {
+    const todo = this.getTodoById(id);
+    await Todo.delete((await todo).id);
+  }
 }
