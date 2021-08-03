@@ -5,6 +5,13 @@ import { Todo } from './todo.entity';
 
 @Injectable()
 export class TodosService {
+  async getTodo(): Promise<Todo[]> {
+    const query = Todo.createQueryBuilder('todo');
+
+    const todos = await query.getMany();
+    return todos;
+  }
+
   async getTodoById(id: number): Promise<Todo> {
     const found = await Todo.findOne(id);
     if (!found) {
