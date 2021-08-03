@@ -6,17 +6,17 @@ export class Todo extends BaseEntity {
   id: number;
 
   @Column()
-  text: string;
+  content: string;
 
   @Column()
-  created: Date;
+  created: string;
 
   @Column()
-  lastEdited: Date;
+  lastEdited: string;
 
   @Column()
   ref: string;
 
   @Column()
-  status: boolean;
+  status: number;
 }
