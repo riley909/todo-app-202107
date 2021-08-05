@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TodosStatus } from './todos-status.enum';
 
 @Entity()
 export class Todo {
@@ -18,5 +19,5 @@ export class Todo {
   ref: string;
 
   @Column()
-  status: number;
+  status: TodosStatus;
 }
