@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { GetTodosFilterDto } from './dto/get-todos-filter.dto';
@@ -18,7 +19,7 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  getTodo(filterDto: GetTodosFilterDto): Promise<Todo[]> {
+  getTodos(@Query() filterDto: GetTodosFilterDto): Promise<Todo[]> {
     return this.todosService.getTodos(filterDto);
   }
 
