@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -19,8 +21,11 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  getTodos(@Query() filterDto: GetTodosFilterDto): Promise<Todo[]> {
-    return this.todosService.getTodos(filterDto);
+  getTodos(
+    @Query() filterDto: GetTodosFilterDto,
+    @Query('page') page: number,
+  ): Promise<Todo[]> {
+    return this.todosService.getTodos(filterDto, page);
   }
 
   @Get('/:id')
