@@ -1,25 +1,36 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { GetTodosFilterDto } from './dto/get-todos-filter.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
+import { TodosStatus } from './todos-status.enum';
 
 @EntityRepository(Todo)
 export class TodosRepository extends Repository<Todo> {
-  async getTodos(filterDto: GetTodosFilterDto): Promise<Todo[]> {
-    // const { status, created, search } = filterDto;
-    const query = this.createQueryBuilder('todo');
+  async getTodos(
+    filterDto: GetTodosFilterDto,
+    page: number = 1,
+  ): Promise<Todo[]> {
+    const { status, created, search } = filterDto;
+    const query = this.createQueryBuilder('todo')
+      .take(5)
+      .skip(5 * (page - 1));
 
-    // if (status) {
-    //   query.andWhere('todo.status = :status', { status });
-    // }
+    if (status) {
+      query.andWhere('todo.status = :status', { status });
+    }
 
-    // if (created) {
-    // }
+    if (created) {
+      query.andWhere('todo.created = :created', { created });
+    }
 
-    // if (search) {
-    // }
+    if (search) {
+      query.andWhere('LOWER(todo.content) LIKE LOWER(:search)', {
+        search: `%${search}%`,
+      });
+    }
 
     const todos = await query.getMany();
     return todos;
@@ -50,7 +61,7 @@ export class TodosRepository extends Repository<Todo> {
       created: date,
       lastEdited: date,
       ref,
-      status: 0,
+      status: TodosStatus.OPEN,
     });
 
     await this.save(todo);
