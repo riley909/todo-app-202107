@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Injectable } from '@nestjs/common';
 import { GetTodosFilterDto } from './dto/get-todos-filter.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -13,8 +14,8 @@ export class TodosService {
     private todosRepository: TodosRepository,
   ) {}
 
-  getTodos(filterDto: GetTodosFilterDto): Promise<Todo[]> {
-    return this.todosRepository.getTodos(filterDto);
+  getTodos(filterDto: GetTodosFilterDto, page: number = 1): Promise<Todo[]> {
+    return this.todosRepository.getTodos(filterDto, page);
   }
 
   getTodoById(id: number): Promise<Todo> {
