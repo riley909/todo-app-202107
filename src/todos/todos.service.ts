@@ -6,6 +6,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
 import { TodosRepository } from './todos.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdateStatusDto } from './dto/update-status.dto';
 
 @Injectable()
 export class TodosService {
@@ -33,5 +34,12 @@ export class TodosService {
 
   updateTodo(id: number, updateTodoDto: UpdateTodoDto): Promise<Todo> {
     return this.todosRepository.updateTodo(id, updateTodoDto);
+  }
+
+  updateTodoStatus(
+    id: number,
+    updateStatusDto: UpdateStatusDto,
+  ): Promise<Todo> {
+    return this.todosRepository.updateTodoStatus(id, updateStatusDto);
   }
 }
