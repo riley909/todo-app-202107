@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { GetTodosFilterDto } from './dto/get-todos-filter.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
-import { TodosStatus } from './todos-status.enum';
 
 @EntityRepository(Todo)
 export class TodosRepository extends Repository<Todo> {
@@ -61,7 +61,7 @@ export class TodosRepository extends Repository<Todo> {
       created: date,
       lastEdited: date,
       ref,
-      status: TodosStatus.OPEN,
+      status: 0,
     });
 
     await this.save(todo);
@@ -75,6 +75,30 @@ export class TodosRepository extends Repository<Todo> {
     todo.content = content;
     todo.lastEdited = date;
     todo.ref = ref;
+    await this.save(todo);
+    return todo;
+  }
+
+  async updateTodoStatus(
+    id: number,
+    updateStatusDto: UpdateStatusDto,
+  ): Promise<Todo> {
+    const { status } = updateStatusDto;
+    const todo = await this.getTodoById(id);
+    let refArr;
+
+    if (todo.ref !== '') {
+      refArr = todo.ref.split(',');
+      refArr.pop();
+
+      for (let i = 0; i < refArr.length; i++) {
+        const newTodo = await this.getTodoById(refArr[i]);
+        if (newTodo.status === 0) {
+          throw new BadRequestException();
+        }
+      }
+    }
+    todo.status = status;
     await this.save(todo);
     return todo;
   }
