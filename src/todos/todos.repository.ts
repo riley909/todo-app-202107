@@ -14,9 +14,7 @@ export class TodosRepository extends Repository<Todo> {
     page: number = 1,
   ): Promise<Todo[]> {
     const { status, created, search } = filterDto;
-    const query = this.createQueryBuilder('todo')
-      .take(5)
-      .skip(5 * (page - 1));
+    const query = this.createQueryBuilder('todo');
 
     if (status) {
       query.andWhere('todo.status = :status', { status });
@@ -31,7 +29,6 @@ export class TodosRepository extends Repository<Todo> {
         search: `%${search}%`,
       });
     }
-
     const todos = await query.getMany();
     return todos;
   }
