@@ -1,10 +1,9 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { TodosStatus } from '../todos-status.enum';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class GetTodosFilterDto {
   @IsOptional()
-  @IsEnum(TodosStatus)
-  status?: string;
+  @IsNumber()
+  status?: number;
 
   @IsOptional()
   @IsString()
